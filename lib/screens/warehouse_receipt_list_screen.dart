@@ -110,16 +110,16 @@ class _WarehouseReceiptListScreenState extends State<WarehouseReceiptListScreen>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WarehouseReceiptForm()),
-          );
-        },
-        backgroundColor: Colors.indigo,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const WarehouseReceiptForm()),
+      //     );
+      //   },
+      //   backgroundColor: Colors.indigo,
+      //   child: const Icon(Icons.add, color: Colors.white),
+      // ),
     );
   }
 

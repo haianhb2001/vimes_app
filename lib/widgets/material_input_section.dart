@@ -61,13 +61,17 @@ class MaterialInputSection extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: onAddMaterial,
-                icon: const Icon(Icons.add),
-                label: const Text('Thêm vật tư'),
+                icon: const Icon(Icons.add, color: Colors.white),
+                label: const Text('Thêm vật tư', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -75,8 +79,8 @@ class MaterialInputSection extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: onClearFields,
-                icon: const Icon(Icons.clear),
-                label: const Text('Xóa trắng'),
+                icon: const Icon(Icons.clear, color: Colors.white),
+                label: const Text('Xóa trắng', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

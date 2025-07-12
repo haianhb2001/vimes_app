@@ -32,7 +32,7 @@ class FormActions extends StatelessWidget {
             backgroundColor: Colors.indigo,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            padding: const EdgeInsets.symmetric(vertical: 18),
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
             textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),

@@ -22,6 +22,12 @@ class WarehouseReceiptDetailScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.indigo,
         elevation: 2,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
