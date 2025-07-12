@@ -143,19 +143,27 @@ class _WarehouseReceiptListScreenState extends State<WarehouseReceiptListScreen>
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context);
+                  // Lưu context trước khi async operation
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+
                   try {
                     await FirebaseService.deleteWarehouseReceipt(receipt.id!);
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Đã xóa phiếu nhập kho thành công'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                    // Kiểm tra widget còn mounted không trước khi hiển thị SnackBar
+                    if (mounted) {
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Đã xóa phiếu nhập kho thành công'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Lỗi khi xóa: $e'), backgroundColor: Colors.red),
-                    );
+                    // Kiểm tra widget còn mounted không trước khi hiển thị SnackBar
+                    if (mounted) {
+                      scaffoldMessenger.showSnackBar(
+                        SnackBar(content: Text('Lỗi khi xóa: $e'), backgroundColor: Colors.red),
+                      );
+                    }
                   }
                 },
                 child: const Text('Xóa', style: TextStyle(color: Colors.red)),

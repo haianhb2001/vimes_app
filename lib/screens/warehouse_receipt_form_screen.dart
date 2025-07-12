@@ -59,12 +59,14 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
         _quantityReceivedController.text.trim().isEmpty ||
         _unitPriceController.text.trim().isEmpty) {
       // Hiển thị thông báo lỗi
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vui lòng điền đầy đủ thông tin vật tư'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vui lòng điền đầy đủ thông tin vật tư'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
@@ -74,29 +76,35 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
 
     // Kiểm tra giá trị số hợp lệ
     if (quantityDocument == null || quantityDocument <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Số lượng theo chứng từ phải là số dương'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Số lượng theo chứng từ phải là số dương'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
     if (quantityReceived == null || quantityReceived <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Số lượng thực nhận phải là số dương'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Số lượng thực nhận phải là số dương'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
     if (unitPrice == null || unitPrice <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Đơn giá phải là số dương'), backgroundColor: Colors.red),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đơn giá phải là số dương'), backgroundColor: Colors.red),
+        );
+      }
       return;
     }
 
@@ -119,13 +127,15 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
     });
 
     // Hiển thị thông báo thành công
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Đã thêm vật tư: $itemName\nCác trường đã được giữ nguyên để thêm tiếp'),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã thêm vật tư: $itemName\nCác trường đã được giữ nguyên để thêm tiếp'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   void _deleteMaterial(int index) {
@@ -148,13 +158,15 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
       _unitPriceController.clear();
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Đã xóa trắng các trường vật tư\nSử dụng nút này khi muốn nhập vật tư mới'),
-        backgroundColor: Colors.blue,
-        duration: Duration(seconds: 2),
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đã xóa trắng các trường vật tư\nSử dụng nút này khi muốn nhập vật tư mới'),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   void _saveReceipt() async {
@@ -169,12 +181,14 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vui lòng điền đầy đủ thông tin bắt buộc'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vui lòng điền đầy đủ thông tin bắt buộc'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
@@ -183,12 +197,14 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vui lòng thêm ít nhất một vật tư'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vui lòng thêm ít nhất một vật tư'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
