@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:vimes_app/screens/warehouse_receipt_form_screen.dart';
+import 'package:vimes_app/presentation/screens/warehouse_receipt_form_screen.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

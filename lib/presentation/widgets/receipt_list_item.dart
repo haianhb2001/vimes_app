@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/warehouse_receipt.dart';
-import '../utils/currency_formatter.dart';
+import '../../domain/entities/warehouse_receipt.dart';
+import '../../core/utils/currency_formatter.dart';
 
 class ReceiptListItem extends StatelessWidget {
   final WarehouseReceipt receipt;

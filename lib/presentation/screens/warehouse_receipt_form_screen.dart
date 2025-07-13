@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/warehouse_receipt.dart';
-import '../utils/currency_formatter.dart';
+import '../../domain/entities/warehouse_receipt.dart';
+import '../../domain/entities/material_item.dart';
+import '../../core/utils/currency_formatter.dart';
 import '../widgets/general_info_section.dart';
 import '../widgets/material_section_card.dart';
 import '../widgets/form_actions.dart';
-import '../services/firebase_service.dart';
+import '../../data/services/firebase_service.dart';
 
 class WarehouseReceiptForm extends StatefulWidget {
   const WarehouseReceiptForm({super.key});
@@ -141,9 +142,10 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
   void _deleteMaterial(int index) {
     setState(() {
       _materialItemsList.removeAt(index);
-      // Cập nhật lại index
+      // Cập nhật lại index bằng cách tạo object mới
       for (int i = 0; i < _materialItemsList.length; i++) {
-        _materialItemsList[i].index = i + 1;
+        final oldItem = _materialItemsList[i];
+        _materialItemsList[i] = oldItem.copyWith(index: i + 1);
       }
     });
   }
@@ -229,6 +231,7 @@ class _WarehouseReceiptFormState extends State<WarehouseReceiptForm> {
         totalAmount: _totalAmount,
         totalAmountText: _totalAmountTextController.text,
         unit: _unitController.text,
+        createdAt: DateTime.now(),
       );
 
       // Lưu vào Firebase

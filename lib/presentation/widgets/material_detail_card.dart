@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/warehouse_receipt.dart';
-import '../utils/currency_formatter.dart';
+import '../../domain/entities/material_item.dart';
+import '../../core/utils/currency_formatter.dart';
 import 'info_row_widget.dart';
 
 class MaterialDetailCard extends StatelessWidget {

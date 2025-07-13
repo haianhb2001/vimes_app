@@ -1,6 +1,6 @@
 # Vimes Warehouse Receipts App
 
-Ứng dụng Flutter quản lý phiếu nhập kho, kết nối Firebase Firestore.
+Ứng dụng Flutter quản lý phiếu nhập kho, kết nối Firebase Firestore, được tái cấu trúc theo mô hình Clean Architecture.
 
 ## Tính năng chính
 
@@ -8,123 +8,150 @@
 - Thêm/xóa vật tư cho từng phiếu
 - Lưu trữ dữ liệu trên Firestore
 - Giao diện đẹp, dễ sử dụng
+- Kiến trúc Clean Architecture với BLoC pattern
 
-## Cấu trúc thư mục
-
-```
-lib/
-  models/warehouse_receipt.dart         # Data models: WarehouseReceipt, MaterialItem
-  services/firebase_service.dart        # Firebase CRUD
-  screens/warehouse_receipt_form_screen.dart   # Form tạo phiếu
-  screens/warehouse_receipt_list_screen.dart   # Danh sách phiếu
-  screens/warehouse_receipt_detail_screen.dart # Chi tiết phiếu
-  widgets/                             # Các widget con (GeneralInfoSection, MaterialListSection, ...)
-  utils/currency_formatter.dart        # Format số tiền VND
-```
-
-## Cấu trúc Code
-
-### Tổng Quan
-
-Ứng dụng đã được tối ưu hóa bằng cách chia nhỏ các màn hình thành các widget con riêng biệt, giúp code sạch hơn, dễ maintain và tái sử dụng.
-
-### Cấu Trúc Thư Mục Chi Tiết
+## Cấu trúc Clean Architecture
 
 ```
 lib/
-├── models/
-│   └── warehouse_receipt.dart          # Data models
-├── screens/
-│   ├── warehouse_receipt_form_screen.dart   # Form tạo phiếu (đã tối ưu)
-│   ├── warehouse_receipt_list_screen.dart   # Danh sách phiếu (đã tối ưu)
-│   └── warehouse_receipt_detail_screen.dart # Chi tiết phiếu (đã tối ưu)
-├── services/
-│   └── firebase_service.dart           # Firebase operations
-├── utils/
-│   └── currency_formatter.dart         # Format số tiền VND
-└── widgets/
-    ├── required_text_field.dart        # Text field với validation
-    ├── required_date_field.dart        # Date field với validation
-    ├── general_info_section.dart       # Phần thông tin chung
-    ├── material_input_section.dart     # Phần nhập vật tư
-    ├── material_list_section.dart      # Phần danh sách vật tư
-    ├── material_section_card.dart      # Card bọc phần vật tư
-    ├── form_actions.dart               # Các nút hành động
-    ├── search_bar_widget.dart          # Thanh tìm kiếm
-    ├── warehouse_receipt_list_item.dart # Item trong danh sách
-    ├── empty_state_widget.dart         # Trạng thái trống
-    ├── error_state_widget.dart         # Trạng thái lỗi
-    ├── info_row_widget.dart            # Dòng thông tin
-    └── material_detail_card.dart       # Card chi tiết vật tư
+├── core/                           # Core layer - Shared utilities
+│   ├── constants/
+│   │   └── app_constants.dart      # App constants, messages
+│   ├── errors/
+│   │   └── failures.dart           # Failure classes for error handling
+│   ├── utils/
+│   │   ├── either.dart             # Either type for functional programming
+│   │   └── currency_formatter.dart # Format số tiền VND
+│   └── di/
+│       └── injection_container.dart # Dependency injection container
+├── domain/                         # Domain layer - Business logic
+│   ├── entities/
+│   │   ├── warehouse_receipt.dart  # Warehouse receipt entity
+│   │   └── material_item.dart      # Material item entity
+│   ├── repositories/
+│   │   └── warehouse_receipt_repository.dart # Repository interface
+│   └── usecases/
+│       └── warehouse_receipt_usecases.dart   # Business logic use cases
+├── data/                           # Data layer - Data management
+│   ├── models/
+│   │   ├── warehouse_receipt_model.dart # Data model with JSON serialization
+│   │   └── material_item_model.dart     # Data model with JSON serialization
+│   ├── datasources/
+│   │   ├── warehouse_receipt_remote_data_source.dart      # Data source interface
+│   │   └── warehouse_receipt_remote_data_source_impl.dart # Firebase implementation
+│   ├── repositories/
+│   │   └── warehouse_receipt_repository_impl.dart         # Repository implementation
+│   └── services/
+│       └── firebase_service.dart   # Firebase operations (legacy)
+└── presentation/                   # Presentation layer - UI
+    ├── screens/
+    │   ├── warehouse_receipt_form_screen.dart   # Form tạo phiếu
+    │   ├── warehouse_receipt_list_screen.dart   # Danh sách phiếu
+    │   └── warehouse_receipt_detail_screen.dart # Chi tiết phiếu
+    ├── widgets/
+    │   ├── required_text_field.dart        # Text field với validation
+    │   ├── required_date_field.dart        # Date field với validation
+    │   ├── general_info_section.dart       # Phần thông tin chung
+    │   ├── material_input_section.dart     # Phần nhập vật tư
+    │   ├── material_list_section.dart      # Phần danh sách vật tư
+    │   ├── material_section_card.dart      # Card bọc phần vật tư
+    │   ├── form_actions.dart               # Các nút hành động
+    │   ├── search_bar_widget.dart          # Thanh tìm kiếm
+    │   ├── receipt_list_item.dart          # Item trong danh sách
+    │   ├── empty_state_widget.dart         # Trạng thái trống
+    │   ├── error_state_widget.dart         # Trạng thái lỗi
+    │   ├── info_row_widget.dart            # Dòng thông tin
+    │   └── material_detail_card.dart       # Card chi tiết vật tư
+    └── blocs/
+        └── warehouse_receipt_bloc.dart     # State management với BLoC
 ```
 
-### Các Widget Con Đã Tạo
+## Kiến trúc Clean Architecture
 
-#### 1. Form Widgets
+### 1. **Core Layer** - Shared utilities
 
-**GeneralInfoSection**
+- **Constants**: App constants, validation messages, error messages
+- **Errors**: Failure classes (ServerFailure, NetworkFailure, etc.)
+- **Utils**: Either type, currency formatter, shared utilities
+- **DI**: Dependency injection container
 
-- **Mục đích**: Hiển thị phần thông tin chung của phiếu nhập kho
-- **Props**: Các TextEditingController cho từng trường
-- **Tái sử dụng**: Có thể dùng cho form tạo và chỉnh sửa
+### 2. **Domain Layer** - Business logic
 
-**MaterialInputSection**
+- **Entities**: Pure business objects (WarehouseReceipt, MaterialItem)
+- **Repositories**: Abstract interfaces for data access
+- **Use Cases**: Business logic operations
 
-- **Mục đích**: Phần nhập thông tin vật tư mới
-- **Props**: Controllers và callbacks cho thêm/xóa trắng
-- **Tái sử dụng**: Có thể dùng cho form tạo và chỉnh sửa
+### 3. **Data Layer** - Data management
 
-**MaterialListSection**
+- **Models**: Data models with JSON serialization
+- **Data Sources**: Abstract and concrete data sources
+- **Repository Implementations**: Concrete implementations of repositories
 
-- **Mục đích**: Hiển thị danh sách vật tư đã thêm
-- **Props**: List vật tư, tổng tiền, callbacks
-- **Tái sử dụng**: Có thể dùng cho form và chi tiết
+### 4. **Presentation Layer** - UI
 
-**FormActions**
+- **Screens**: Main UI screens
+- **Widgets**: Reusable UI components
+- **BLoCs**: State management with events and states
 
-- **Mục đích**: Các nút hành động (Lưu, Làm mới)
-- **Props**: Callbacks và trạng thái loading
-- **Tái sử dụng**: Có thể dùng cho nhiều form khác
+## State Management với BLoC
 
-#### 2. List Widgets
+### Events
 
-**SearchBarWidget**
+- `LoadWarehouseReceipts`: Tải danh sách phiếu
+- `SearchWarehouseReceipts`: Tìm kiếm phiếu
+- `AddWarehouseReceiptEvent`: Thêm phiếu mới
+- `UpdateWarehouseReceiptEvent`: Cập nhật phiếu
+- `DeleteWarehouseReceiptEvent`: Xóa phiếu
+- `LoadItemsByReceiptId`: Tải danh sách vật tư
+- `UpdateItemsEvent`: Cập nhật vật tư
 
-- **Mục đích**: Thanh tìm kiếm
-- **Props**: Hint text, callback onChanged, giá trị ban đầu
-- **Tái sử dụng**: Có thể dùng cho nhiều màn hình danh sách
+### States
 
-**WarehouseReceiptListItem**
+- `WarehouseReceiptInitial`: Trạng thái ban đầu
+- `WarehouseReceiptLoading`: Đang tải
+- `WarehouseReceiptLoaded`: Đã tải thành công
+- `WarehouseReceiptDetailLoaded`: Chi tiết phiếu
+- `WarehouseReceiptError`: Lỗi
+- `WarehouseReceiptSuccess`: Thành công
 
-- **Mục đích**: Item trong danh sách phiếu nhập kho
-- **Props**: WarehouseReceipt object, callbacks, format functions
-- **Tái sử dụng**: Có thể dùng cho danh sách khác
+## Error Handling
 
-**EmptyStateWidget**
+### Failure Types
 
-- **Mục đích**: Hiển thị khi không có dữ liệu
-- **Props**: Icon, message, colors
-- **Tái sử dụng**: Có thể dùng cho nhiều màn hình
+- `ServerFailure`: Lỗi server/Firebase
+- `NetworkFailure`: Lỗi kết nối mạng
+- `CacheFailure`: Lỗi cache
+- `ValidationFailure`: Lỗi validation
+- `UnknownFailure`: Lỗi không xác định
 
-**ErrorStateWidget**
+### Either Type
 
-- **Mục đích**: Hiển thị khi có lỗi
-- **Props**: Error message, retry callback
-- **Tái sử dụng**: Có thể dùng cho nhiều màn hình
+Sử dụng `Either<Failure, Success>` để xử lý kết quả một cách type-safe:
 
-#### 3. Detail Widgets
+```dart
+final result = await repository.getWarehouseReceiptById(id);
+result.fold(
+  (failure) => emit(WarehouseReceiptError(failure.message)),
+  (receipt) => emit(WarehouseReceiptDetailLoaded(receipt)),
+);
+```
 
-**InfoRowWidget**
+## Dependency Injection
 
-- **Mục đích**: Hiển thị một dòng thông tin (label: value)
-- **Props**: Label, value, styles, width
-- **Tái sử dụng**: Có thể dùng cho nhiều màn hình chi tiết
+Sử dụng `InjectionContainer` để quản lý dependencies:
 
-**MaterialDetailCard**
+```dart
+// Data Sources
+WarehouseReceiptRemoteDataSource get warehouseReceiptRemoteDataSource
 
-- **Mục đích**: Card hiển thị chi tiết một vật tư
-- **Props**: MaterialItem object
-- **Tái sử dụng**: Có thể dùng cho form và chi tiết
+// Repositories
+WarehouseReceiptRepository get warehouseReceiptRepository
+
+// Use Cases
+GetWarehouseReceiptList get getWarehouseReceiptList
+AddWarehouseReceipt get addWarehouseReceipt
+// ... other use cases
+```
 
 ## Hướng dẫn sử dụng
 

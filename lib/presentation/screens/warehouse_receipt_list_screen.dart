@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/warehouse_receipt.dart';
-import '../services/firebase_service.dart';
+import '../../domain/entities/warehouse_receipt.dart';
+import '../../data/services/firebase_service.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/receipt_list_item.dart';
 import '../widgets/empty_state_widget.dart';

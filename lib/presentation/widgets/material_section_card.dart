@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/warehouse_receipt.dart';
+import '../../domain/entities/material_item.dart';
 import 'material_input_section.dart';
 import 'material_list_section.dart';
 

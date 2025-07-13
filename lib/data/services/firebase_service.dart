@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/warehouse_receipt.dart';
+import '../models/warehouse_receipt_model.dart';
+import '../models/material_item_model.dart';
+import '../../domain/entities/warehouse_receipt.dart';
+import '../../domain/entities/material_item.dart';
 
 class FirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -12,15 +15,20 @@ class FirebaseService {
     List<MaterialItem> items,
   ) async {
     try {
+      // Chuyển đổi entity sang model
+      final receiptModel = WarehouseReceiptModel.fromEntity(receipt);
+
       // Tạo document mới cho phiếu nhập kho
-      DocumentReference docRef = await _firestore.collection(_collectionName).add(receipt.toJson());
+      DocumentReference docRef = await _firestore
+          .collection(_collectionName)
+          .add(receiptModel.toJson());
 
       // Thêm items vào subcollection
       if (items.isNotEmpty) {
         for (int i = 0; i < items.length; i++) {
           final item = items[i];
-          item.index = i + 1; // Đặt index cho item
-          await docRef.collection(_subcollectionName).add(item.toJson());
+          final itemModel = MaterialItemModel.fromEntityWithIndex(item, i + 1);
+          await docRef.collection(_subcollectionName).add(itemModel.toJson());
         }
       }
 
@@ -38,7 +46,8 @@ class FirebaseService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return WarehouseReceipt.fromJson(doc.data(), doc.id);
+            final model = WarehouseReceiptModel.fromJson(doc.data(), doc.id);
+            return model.toEntity();
           }).toList();
         });
   }
@@ -49,7 +58,8 @@ class FirebaseService {
       DocumentSnapshot doc = await _firestore.collection(_collectionName).doc(id).get();
 
       if (doc.exists) {
-        return WarehouseReceipt.fromJson(doc.data() as Map<String, dynamic>, doc.id);
+        final model = WarehouseReceiptModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
+        return model.toEntity();
       }
       return null;
     } catch (e) {
@@ -67,7 +77,8 @@ class FirebaseService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return MaterialItem.fromJson(doc.data(), doc.id);
+            final model = MaterialItemModel.fromJson(doc.data(), doc.id);
+            return model.toEntity();
           }).toList();
         });
   }
@@ -79,7 +90,8 @@ class FirebaseService {
         throw Exception('ID phiếu nhập kho không được để trống');
       }
 
-      await _firestore.collection(_collectionName).doc(receipt.id).update(receipt.toJson());
+      final receiptModel = WarehouseReceiptModel.fromEntity(receipt);
+      await _firestore.collection(_collectionName).doc(receipt.id).update(receiptModel.toJson());
     } catch (e) {
       throw Exception('Lỗi khi cập nhật phiếu nhập kho: $e');
     }
@@ -103,12 +115,12 @@ class FirebaseService {
       // Thêm items mới
       for (int i = 0; i < items.length; i++) {
         final item = items[i];
-        item.index = i + 1;
+        final itemModel = MaterialItemModel.fromEntityWithIndex(item, i + 1);
         await _firestore
             .collection(_collectionName)
             .doc(receiptId)
             .collection(_subcollectionName)
-            .add(item.toJson());
+            .add(itemModel.toJson());
       }
     } catch (e) {
       throw Exception('Lỗi khi cập nhật items: $e');
@@ -143,7 +155,8 @@ class FirebaseService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return WarehouseReceipt.fromJson(doc.data(), doc.id);
+            final model = WarehouseReceiptModel.fromJson(doc.data(), doc.id);
+            return model.toEntity();
           }).toList();
         });
   }
@@ -161,7 +174,8 @@ class FirebaseService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return WarehouseReceipt.fromJson(doc.data(), doc.id);
+            final model = WarehouseReceiptModel.fromJson(doc.data(), doc.id);
+            return model.toEntity();
           }).toList();
         });
   }
@@ -175,7 +189,8 @@ class FirebaseService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return WarehouseReceipt.fromJson(doc.data(), doc.id);
+            final model = WarehouseReceiptModel.fromJson(doc.data(), doc.id);
+            return model.toEntity();
           }).toList();
         });
   }
